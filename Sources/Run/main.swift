@@ -14,6 +14,7 @@ try LoggingSystem.bootstrap(from: &env) { level in
 }
 
 let app = Application(env)
+app.http.server.configuration.hostname = "0.0.0.0"
 defer { app.shutdown() }
 try configure(app)
 try app.run()

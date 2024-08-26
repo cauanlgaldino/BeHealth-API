@@ -17,6 +17,9 @@ final class User: Model {
     @Field(key: "avatar")
     var avatar: String?
     
+    @Field(key: "bio")
+    var bio: String?
+    
     @Field(key: "password")
     var password: String
     
@@ -25,11 +28,12 @@ final class User: Model {
     
     init() { }
     
-    init(username: String, name: String, avatar: String?, password: String) {
+    init(username: String, name: String, avatar: String?, bio: String?, password: String) {
         self.username = username
         self.name = name
         self.avatar = avatar
         self.password = password
+        self.bio = bio
     }
     
 }
@@ -49,10 +53,11 @@ extension User {
         var username: String
         var name: String
         var avatar: String?
+        var bio: String?
     }
     
     convenience init(_ input: Input) throws {
-        self.init(username: input.username, name: input.name, avatar: nil, password: try Bcrypt.hash(input.password))
+        self.init(username: input.username, name: input.name, avatar: nil, bio: nil, password: try Bcrypt.hash(input.password))
     }
     
     var `public`: Public {

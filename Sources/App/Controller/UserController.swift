@@ -11,6 +11,7 @@ struct UserController: RouteCollection {
             $0.group(Token.authenticator()) {
                 $0.get("me", use: current)
                 $0.put("avatar", use: updateAvatar)
+                $0.put("bio", use: updateBio) // ..../users/bio
                 $0.delete("avatar", use: deleteAvatar)
                 $0.post("logout", use: logout)
             }
@@ -76,6 +77,22 @@ struct UserController: RouteCollection {
         let user = try req.auth.require(User.self)
         user.avatar = nil
         try await user.save(on: req.db)
+        return user.public
+    }
+    
+    func updateBio(req: Request) async throws -> User.Public {
+        // Autentica o usuário
+        let user = try req.auth.require(User.self)
+        
+        // Verifica se o corpo da requisição contém dados
+        let bio = try req.content.decode(String.self)
+        
+        user.bio = bio
+        
+        // Salva as mudanças no banco de dados
+        try await user.save(on: req.db)
+        
+        // Retorna a versão pública do usuário atualizado
         return user.public
     }
     

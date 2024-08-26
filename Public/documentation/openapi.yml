@@ -126,6 +126,34 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+                
+    /users/bio:
+      put:
+        tags:
+           - Users
+        summary: Update current authenticated user bio
+        security:
+          - BearerAuth: []
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  bio:
+                    type: string
+                    description: The biography information about the user
+                    example: "Today is a beautiful day"
+                required:
+                  - bio
+        responses:
+          '200':
+            description: The updated user object
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/User'
 
     delete:
       tags:
