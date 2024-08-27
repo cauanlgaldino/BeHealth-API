@@ -39,15 +39,15 @@ final class Post: Model {
         self.$parent.id = parentID
     }
     
-    init(form: Form, userID: User.IDValue, parentID: Post.IDValue? = nil) {
-        self.text = form.text
-        if let media = form.media {
-            self.media = try? media.data.write(to: URL(fileURLWithPath: DirectoryConfiguration.detect().publicDirectory), contentType: media.contentType)
-        }
-        self.likeCount = 0
-        self.$user.id = userID
-        self.$parent.id = parentID
-    }
+//    init(form: Form, userID: User.IDValue, parentID: Post.IDValue? = nil) {
+//        self.text = form.text
+//        if let media = form.media {
+//            self.media = try? media.data.write(to: URL(fileURLWithPath: DirectoryConfiguration.detect().publicDirectory), contentType: media.contentType)
+//        }
+//        self.likeCount = 0
+//        self.$user.id = userID
+//        self.$parent.id = parentID
+//    }
     
     var `public`: Public {
         .init(id: id!, text: text, media: media, likeCount: likeCount, createdAt: createdAt, updatedAt: updatedAt, userID: $user.id, user: $user.value?.public)
@@ -61,7 +61,7 @@ extension Post {
     
     struct Form: Content {
         var text: String
-        var media: File?
+        var media: String?
     }
     
     struct Public: Content {

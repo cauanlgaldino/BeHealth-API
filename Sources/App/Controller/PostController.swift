@@ -41,14 +41,14 @@ struct PostController: RouteCollection {
                 let post = try Post(text: content, userID: user.requireID(), parentID: id)
                 try await post.save(on: req.db)
                 return post.public
-            case .formData?:
-                let form = try req.content.decode(Post.Form.self)
-                guard let contentType = form.media?.contentType, [.any].contains(contentType) else {
-                    throw Abort(.unsupportedMediaType)
-                }
-                let post = try Post(form: form, userID: user.requireID(), parentID: id)
-                try await post.save(on: req.db)
-                return post.public
+//            case .formData?:
+//                let form = try req.content.decode(Post.Form.self)
+//                guard let contentType = form.media?.contentType, [.any].contains(contentType) else {
+//                    throw Abort(.unsupportedMediaType)
+//                }
+//                let post = try Post(form: form, userID: user.requireID(), parentID: id)
+//                try await post.save(on: req.db)
+//                return post.public
             default:
                 throw Abort(.badRequest)
         }
@@ -83,14 +83,19 @@ struct PostController: RouteCollection {
                 let post = try Post(text: content, userID: user.requireID())
                 try await post.save(on: req.db)
                 return post.public
-            case .formData?:
-                let form = try req.content.decode(Post.Form.self)
-                guard let contentType = form.media?.contentType, [.any].contains(contentType) else {
-                    throw Abort(.unsupportedMediaType)
-                }
-                let post = try Post(form: form, userID: user.requireID())
+            case .json?:
+                let content = try req.content.decode(Post.Form.self)
+                let post = try Post(text: content.text, media: content.media, userID: user.requireID())
                 try await post.save(on: req.db)
                 return post.public
+//            case .formData?:
+//                let form = try req.content.decode(Post.Form.self)
+//                guard let contentType = form.media?.contentType, [.any].contains(contentType) else {
+//                    throw Abort(.unsupportedMediaType)
+//                }
+//                let post = try Post(form: form, userID: user.requireID())
+//                try await post.save(on: req.db)
+//                return post.public
             default:
                 throw Abort(.badRequest)
         }
