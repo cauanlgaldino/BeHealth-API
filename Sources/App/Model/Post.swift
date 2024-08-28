@@ -17,6 +17,9 @@ final class Post: Model {
     @Field(key: "like_count")
     var likeCount: Int
     
+    @Field(key: "tag")
+    var tag: String?
+    
     @Parent(key: "user_id")
     var user: User
   
@@ -50,7 +53,7 @@ final class Post: Model {
 //    }
     
     var `public`: Public {
-        .init(id: id!, text: text, media: media, likeCount: likeCount, createdAt: createdAt, updatedAt: updatedAt, userID: $user.id, user: $user.value?.public)
+        .init(id: id!, text: text, media: media, tag: tag, likeCount: likeCount, createdAt: createdAt, updatedAt: updatedAt, userID: $user.id, user: $user.value?.public)
     }
     
 }
@@ -68,6 +71,7 @@ extension Post {
         var id: UUID
         var text: String
         var media: String?
+        var tag: String?
         var likeCount: Int
         var createdAt: Date?
         var updatedAt: Date?
@@ -115,6 +119,9 @@ extension Post {
         @Field(key: "media")
         var media: String?
         
+        @Field(key: "tag")
+        var tag: String?
+        
         @Field(key: "like_count")
         var likeCount: Int
         
@@ -126,19 +133,17 @@ extension Post {
         
         init() {}
         
-        init(text: String, media: String? = nil, userID: User.IDValue, createdAt: Date) {
+        init(text: String, media: String? = nil, tag: String? = nil, userID: User.IDValue, createdAt: Date) {
             self.text = text
             self.media = media
+            self.tag = tag
             self.createdAt = createdAt
             self.likeCount = 0
             self.$user.id = userID
         }
         
         var `public`: Post.Public {
-            Post.Public(id: id!, text: text, media: media, likeCount: likeCount, createdAt: createdAt, updatedAt: nil, userID: $user.id)
+            Post.Public(id: id!, text: text, media: media, tag: tag, likeCount: likeCount, createdAt: createdAt, updatedAt: nil, userID: $user.id)
         }
-        
     }
-    
-    
 }

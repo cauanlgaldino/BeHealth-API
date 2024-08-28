@@ -8,6 +8,7 @@ struct CreatePost: AsyncMigration {
             .id()
             .field("text", .string)
             .field("media", .string)
+            .field("tag", .string)
             .field("like_count", .int)
             .field("created_at", .datetime)
             .field("updated_at", .datetime)

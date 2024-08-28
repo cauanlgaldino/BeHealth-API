@@ -126,34 +126,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-                
-    /users/bio:
-      put:
-        tags:
-           - Users
-        summary: Update current authenticated user bio
-        security:
-          - BearerAuth: []
-        requestBody:
-          required: true
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  bio:
-                    type: string
-                    description: The biography information about the user
-                    example: "Today is a beautiful day"
-                required:
-                  - bio
-        responses:
-          '200':
-            description: The updated user object
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/User'
 
     delete:
       tags:
@@ -168,8 +140,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-    
-          
+  /users/bio:
+    put:
+      tags:
+          - Users
+      summary: Update current authenticated user bio
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          text/plain:
+            schema:
+              type: string
+              description: The content of the post
+      responses:
+        '200':
+          description: The updated user object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        
   /users/me:
     get:
       tags:
@@ -524,6 +516,9 @@ components:
         avatar:
           type: string
           description: The user avatar media path.
+        bio:
+          type: string
+          description: Information about the user.
       required:
         - id
         - username
