@@ -15,20 +15,20 @@ final class Follow: Model {
     @ID(key: .id)
     var id: UUID?
     
-    @Parent(key: "user_id")
-    var user: User
-    
     @Parent(key: "follower_id")
     var follower: User
     
-    @Field(key: "created_at")
+    @Parent(key: "following_id")
+    var following: User
+    
+    @Timestamp(key: "created_at", on: .create)
     var createdAt: Date?
     
     init() {}
     
-    init(userID: User.IDValue, followerID: User.IDValue) {
-        self.$user.id = userID
-        self.$follower.id = followerID
+    init(followerId: User.IDValue, followingId: User.IDValue) {
+        self.$follower.id = followerId
+        self.$following.id = followingId
     }
 }
 
@@ -37,20 +37,19 @@ extension Follow: Content { }
 extension Follow {
     
     struct Input: Content {
-        var userID: UUID
-        var followerID: UUID
-//        var createdAt: Date
+        var followerId: UUID
+        var followingId: UUID
     }
     
     struct Public: Content {
         var id: UUID
-        var userID: UUID
-        var followerID: UUID
+        var followerId: UUID
+        var followingId: UUID
         var createdAt: Date?
     }
     
     var `public`: Public {
-        .init(id: id!, userID: $user.id, followerID: $follower.id, createdAt: createdAt)
+        .init(id: id!, followerId: $follower.id, followingId: $following.id, createdAt: createdAt)
     }
     
 }
