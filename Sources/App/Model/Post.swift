@@ -34,9 +34,10 @@ final class Post: Model {
     
     init() {}
     
-    init(text: String, media: String? = nil, userID: User.IDValue, parentID: Post.IDValue? = nil) {
+    init(text: String, media: String? = nil, tag: String? = nil, userID: User.IDValue, parentID: Post.IDValue? = nil) {
         self.text = text
         self.media = media
+        self.tag = tag
         self.likeCount = 0
         self.$user.id = userID
         self.$parent.id = parentID
