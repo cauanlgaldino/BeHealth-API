@@ -496,6 +496,97 @@ paths:
       responses:
         '204':
           description: The post was successfully unliked
+
+  /follow:
+    post:
+      tags:
+        - Follow
+      summary: Follow a user
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                following_id:
+                  type: string
+                  format: uuid
+                  description: ID of the user to follow
+      responses:
+        '201':
+          description: The follow relationship was successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Follow'
+                
+  /follow/followers/{user_id}:
+    get:
+      tags:
+        - Follow
+      summary: Get the list of followers for a user
+      parameters:
+        - in: path
+          name: user_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: ID of the user to retrieve followers
+      responses:
+        '200':
+          description: A list of users following the specified user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    
+  /follow/following/{user_id}:
+    get:
+      tags:
+        - Follow
+      summary: Get the list of users a user is following
+      parameters:
+        - in: path
+          name: user_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: ID of the user to retrieve following users
+      responses:
+        '200':
+          description: A list of users followed by the specified user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+                  
+  /follow/{followed_user_id}:
+    delete:
+      tags:
+        - Follow
+      summary: Unfollow a user
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: following_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: ID of the user to unfollow
+      responses:
+        '204':
+          description: The follow relationship was successfully deleted
           
 components:
   schemas:
@@ -523,6 +614,31 @@ components:
         - id
         - username
         - name
+
+    Follow:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The follow relationship ID.
+        follower_id:
+          type: string
+          format: uuid
+          description: The ID of the follower.
+        following_id:
+          type: string
+          format: uuid
+          description: The ID of the followed user.
+        created_at:
+          type: string
+          format: date-time
+          description: The timestamp when the follow relationship was created.
+      required:
+        - id
+        - follower_user_id
+        - followed_user_id
+        - created_at
           
     Session:
       type: object
