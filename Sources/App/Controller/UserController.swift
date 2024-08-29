@@ -59,6 +59,13 @@ struct UserController: RouteCollection {
         return user.public
     }
     
+    func deleteAvatar(req: Request) async throws -> User.Public {
+        let user = try req.auth.require(User.self)
+        user.avatar = nil
+        try await user.save(on: req.db)
+        return user.public
+    }
+    
     func updateAvatar(req: Request) async throws -> User.Public {
         guard [.png, .jpeg].contains(req.headers.contentType) else {
             throw Abort(.unsupportedMediaType)
@@ -73,12 +80,21 @@ struct UserController: RouteCollection {
         return user.public
     }
     
-    func deleteAvatar(req: Request) async throws -> User.Public {
-        let user = try req.auth.require(User.self)
-        user.avatar = nil
-        try await user.save(on: req.db)
-        return user.public
-    }
+//    func updateAvatar(req: Request) async throws -> User.Public {
+//        // Autentica o usuário
+//        let user = try req.auth.require(User.self)
+//        
+//        // Verifica se o corpo da requisição contém dados
+//        let mod = try req.content.decode(Bool.self)
+//        
+//        user.mod = mod
+//        
+//        // Salva as mudanças no banco de dados
+//        try await user.save(on: req.db)
+//        
+//        // Retorna a versão pública do usuário atualizado
+//        return user.public
+//    }
     
     func updateBio(req: Request) async throws -> User.Public {
         // Autentica o usuário
